@@ -360,14 +360,16 @@ def intermediate_translate_and_eval(cfg, trainer, task, epoch_itr, valid_subsets
 
     # I manually estimated the max_size. This is likely too loose of an estimate because the untrained model
     # has much longer generations - we could dynamically reduce this size. Although 2 MB who cares.
-    result = distributed_utils.all_gather_list(generations, max_size=2097152)
 
+    # result = distributed_utils.all_gather_list(generations, max_size=2097152)
+    # result = generations
     # Post process the all-gathered results. Maybe we can be smarter about all-gather somehow
     # and then we won't have to do this additional post-processing.
-    generations = defaultdict(list)
-    for dict_result in result:
-        for key, value in dict_result.items():
-            generations[key].extend(value)
+    #generations = defaultdict(list)
+    #for dict_result in result:
+    #    print(dict_result)
+    #    for key, value in dict_result.items():
+    #        generations[key].extend(value)
 
     for key in generations:
         assert len(generations[key]) == 997, f'Flores 200 has 997 sentences but we got {len(generations[key])} for {key}'
